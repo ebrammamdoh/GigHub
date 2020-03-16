@@ -283,3 +283,4 @@ D:\Test\.Net_F\GigHub\GigHub\obj\Debug\GigHub.dll
 D:\Test\.Net_F\GigHub\GigHub\obj\Debug\GigHub.pdb
 D:\Test\.Net_F\GigHub\GigHub\obj\Debug\GigHub.Migrations.AddIsCanceledToGig.resources
 D:\Test\.Net_F\GigHub\GigHub\obj\Debug\GigHub.Migrations.AddNotification.resources
+D:\Test\.Net_F\GigHub\GigHub\obj\Debug\GigHub.Migrations.foo.resources

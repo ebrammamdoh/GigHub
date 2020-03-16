@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Data.Entity;
 
 namespace GigHub.Controllers.Api
 {
@@ -22,30 +23,13 @@ namespace GigHub.Controllers.Api
         public IHttpActionResult Cancel(int id)
         {
             var userId = User.Identity.GetUserId();
-            var gig = _context.Gigs.FirstOrDefault(g => g.Id == id && g.ArtistId == userId);
+            var gig = _context.Gigs.Include(g => g.Attendances.Select(t => t.Attendee))
+                .FirstOrDefault(g => g.Id == id && g.ArtistId == userId);
+
             if (gig.IsCanceled)
                 return NotFound();
-            gig.IsCanceled = true;
-            var notication = new Notification
-            {
-                DateTime = DateTime.Now,
-                Gig = gig,
-                NotificationType = NotificationType.GigCanceled,
-                OriginalDateTime = gig.DateTime,
-                OriginalVenue = gig.Venue
-            };
-            _context.Notifications.Add(notication);
-            var attendee = _context.Attendances.Where(t => t.GigId == gig.Id).Select(t => t.Attendee).ToList();
-            attendee.ForEach(user =>
-               {
-                   var userNotification = new UserNotification
-                   {
-                       Notification = notication,
-                       User = user
-                   };
-                   _context.UserNotifications.Add(userNotification);
-               });
 
+            gig.Cancel();
 
             _context.SaveChanges();
 
