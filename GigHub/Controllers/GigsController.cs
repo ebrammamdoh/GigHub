@@ -114,7 +114,8 @@ namespace GigHub.Controllers
                 return View("GigForm", viewModel);
             }
             var userId = User.Identity.GetUserId();
-            var gig = _context.Gigs.FirstOrDefault(g => g.Id == viewModel.Id && g.ArtistId == userId);
+            var gig = _context.Gigs.Include(g => g.Attendances.Select(a => a.Attendee))
+                .FirstOrDefault(g => g.Id == viewModel.Id && g.ArtistId == userId);
             gig.Venue = viewModel.Venue;
             gig.DateTime = viewModel.GetDateTime();
             gig.GenreId = viewModel.Genre;
