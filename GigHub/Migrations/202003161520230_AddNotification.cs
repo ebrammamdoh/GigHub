@@ -14,7 +14,7 @@ namespace GigHub.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         DateTime = c.DateTime(nullable: false),
                         NotificationType = c.Int(nullable: false),
-                        OriginalDateTime = c.DateTime(nullable: false),
+                        OriginalDateTime = c.DateTime(),
                         OriginalVenue = c.String(),
                         GigId = c.Int(nullable: false),
                     })
