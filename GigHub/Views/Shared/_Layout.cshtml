@@ -39,19 +39,35 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script type="text/x-template" id="notifications-template">
+        <ul>
+            <%
+            _.each(notifications, function(notification){
+                if(notification.type == 1){%>
+            <li><%= notification.gig.artist.name %> has cancelled the gig at <%= notification.gig.venue %> at <%= notification.gig.datetime %></li>
+                <%}
+            })
+            %>
+        </ul>
+    </script>
     <script>
         $(document).ready(function () {
             $.getJSON("/api/notifications", function (data) {
                 $(".js-notification-count").text(data.length).removeClass("hide").addClass("animate bounceInDown");
+
+                $(".notifications").popover({
+                    html: true,
+                    title: "Notifications",
+                    content: function () {
+                        var compiled = _.template($("#notifications-template").html());
+                        return compiled({ notifications: data });
+
+                    },
+                    placement: "bottom"
+                });
             });
 
-            $(".notifications").popover({
-                html: true,
-                title: "Notifications",
-                content: function () {
-                    return "Hello world";
-                }
-            });
+            
         });
     </script>
 </body>
